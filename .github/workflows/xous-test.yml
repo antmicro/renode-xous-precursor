@@ -3,14 +3,14 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-20.04
-     steps:
-       - uses: actions/checkout@v2
-       - name: Prepare xous dependencies
-         run: |
-           apt install curl -y
-           curl https://sh.rustup.rs -sSf | sh -s -- -y
-           source $HOME/.cargo/env
-       - name: Build xous-precursor renode image
-         run: ./prepare_image.sh
-         shell: bash
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare xous dependencies
+        run: |
+            apt install curl -y
+            curl https://sh.rustup.rs -sSf | sh -s -- -y
+            source $HOME/.cargo/env
+      - name: Build xous-precursor renode image
+        run: ./prepare_image.sh
+        shell: bash
            
