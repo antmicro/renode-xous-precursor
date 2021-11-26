@@ -33,14 +33,14 @@ mach set 0
 runMacro $reset
 sysbus.cpu InstallCustomInstructionHandlerFromFile "00ss0fdbbbbbaaaaa000ddddd0001011" $ORIGIN/vexriscv-aes.py
 mach clear
-#mach create "EC"
-#machine LoadPlatformDescription $ORIGIN/ec/betrusted-ec.repl
-#showAnalyzer uart
-#sysbus SilenceRange <0xE0005800, 0xE0005FFF>
-#macro reset
-#"""
-#    sysbus LoadBinary $ORIGIN/ec/kernel.bin 0x10000000
-#    cpu PC 0x10000000
-#"""
-#runMacro $reset
-#mach clear
+mach create "EC"
+machine LoadPlatformDescription $ORIGIN/ec/betrusted-ec.repl
+showAnalyzer uart
+sysbus SilenceRange <0xE0005800, 0xE0005FFF>
+macro reset
+"""
+    sysbus LoadBinary $ORIGIN/ec/kernel.bin 0x10000000
+    cpu PC 0x10000000
+"""
+runMacro $reset
+mach clear

@@ -13,6 +13,7 @@ ${CONSOLE}                    sysbus.console
 
 Create Xous Machine
     Execute Script            ${SCRIPT}
+    Create Terminal Tester    ${CONSOLE}   SoC
 *** Test Cases ***
 Should Enter Main Loop
     Create Xous Machine
