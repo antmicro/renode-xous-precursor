@@ -7,7 +7,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Prepare xous dependencies
         run: |
-            apt install curl -y
+            sudo apt install curl -y
             curl https://sh.rustup.rs -sSf | sh -s -- -y
             source $HOME/.cargo/env
       - name: Build xous-precursor renode image
