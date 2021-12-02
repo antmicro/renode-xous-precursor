@@ -21,7 +21,7 @@ jobs:
             renode-version: 'latest'
             tests-to-run: 'xous.robot'
       - name: Archive tests results
-        uses: actions/upload-artifacts@v2
+        uses: actions/upload-artifact@v2
         with:
             name: test-results
             path: |
