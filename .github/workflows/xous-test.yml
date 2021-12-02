@@ -13,4 +13,18 @@ jobs:
       - name: Build xous-precursor renode image
         run: ./prepare_image.sh
         shell: bash
-           
+      - name: Copy testing resc file to a proper folder
+        run: cp xous.robot xous-core/emulation
+      - name: Run tests
+        uses: antmicro/renode-test-action@v1.0.0
+        with:
+            renode-version: 'latest'
+            tests-to-run: 'xous.robot'
+      - name: Archive tests results
+        uses: action/upload-artifacts@v2
+        with:
+            name: test-results
+            path: |
+                report.html
+                log.html
+                robot_output.xml
