@@ -14,7 +14,7 @@ jobs:
         run: ./prepare_image.sh
         shell: bash
       - name: Copy testing resc file to a proper folder
-        run: cp xous.robot xous-core/emulation
+        run: cp xous.resc xous-core/emulation/xous-test.resc
       - name: Run tests
         uses: antmicro/renode-test-action@v1.0.0
         with:
