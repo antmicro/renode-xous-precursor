@@ -1,45 +1,49 @@
 using sysbus
-path add $ORIGIN
-i $ORIGIN/peripherals/ABRTCMC.cs
-i $ORIGIN/peripherals/BetrustedEcI2C.cs
-i $ORIGIN/peripherals/BetrustedSocI2C.cs
-i $ORIGIN/peripherals/BetrustedWatchdog.cs
-i $ORIGIN/peripherals/BQ24157.cs
-i $ORIGIN/peripherals/BQ27421.cs
-i $ORIGIN/peripherals/engine.cs
-i $ORIGIN/peripherals/keyboard.cs
-i $ORIGIN/peripherals/keyrom.cs
-i $ORIGIN/peripherals/LiteX_Timer_32.cs
-i $ORIGIN/peripherals/LM3509.cs
-i $ORIGIN/peripherals/LSM6DS3.cs
-i $ORIGIN/peripherals/memlcd.cs
-i $ORIGIN/peripherals/sha512.cs
-i $ORIGIN/peripherals/spinor_soft_int.cs
-i $ORIGIN/peripherals/ticktimer.cs
-i $ORIGIN/peripherals/trng_kernel.cs
-i $ORIGIN/peripherals/trng_server.cs
-i $ORIGIN/peripherals/TUSB320LAI.cs
-i $ORIGIN/peripherals/wfi.cs
+path add $ORIGIN 
+i @peripherals/ABRTCMC.cs
+i @peripherals/BetrustedEcI2C.cs
+i @peripherals/BetrustedSocI2C.cs
+i @peripherals/BetrustedWatchdog.cs
+i @peripherals/BQ24157.cs
+i @peripherals/BQ27421.cs
+i @peripherals/engine.cs
+i @peripherals/keyboard.cs
+i @peripherals/keyrom.cs
+i @peripherals/LiteX_Timer_32.cs
+i @peripherals/LM3509.cs
+i @peripherals/LSM6DS3.cs
+i @peripherals/memlcd.cs
+i @peripherals/sha512.cs
+i @peripherals/spinor_soft_int.cs
+i @peripherals/ticktimer.cs
+i @peripherals/trng_kernel.cs
+i @peripherals/trng_server.cs
+i @peripherals/TUSB320LAI.cs
+i @peripherals/wfi.cs
 mach create "SoC"
-machine LoadPlatformDescription $ORIGIN/soc/betrusted-soc.repl
-sysbus LoadBinary $ORIGIN/../precursors/soc_csr.bin 0x20000000
+machine LoadPlatformDescription @soc/betrusted-soc.repl
+#showAnalyzer uart
+#showAnalyzer console
+#showAnalyzer app_uart
+#showAnalyzer memlcd
+sysbus LoadBinary @../precursors/soc_csr.bin 0x20000000
 macro reset
 """
-    sysbus LoadELF $ORIGIN/../loader/target/riscv32imac-unknown-xous-elf/release/loader
-    sysbus LoadBinary $ORIGIN/../target/riscv32imac-unknown-xous-elf/release/xous.img 0x20980000
+    sysbus LoadELF @../loader/target/riscv32imac-unknown-xous-elf/release/loader
+    sysbus LoadBinary @../target/riscv32imac-unknown-xous-elf/release/xous.img 0x20980000
     cpu SetRegisterUnsafe 10 0x20980000
 """
 mach set 0
 runMacro $reset
-sysbus.cpu InstallCustomInstructionHandlerFromFile "00ss0fdbbbbbaaaaa000ddddd0001011" $ORIGIN/vexriscv-aes.py
+sysbus.cpu InstallCustomInstructionHandlerFromFile "00ss0fdbbbbbaaaaa000ddddd0001011" @vexriscv-aes.py
 mach clear
 mach create "EC"
-machine LoadPlatformDescription $ORIGIN/ec/betrusted-ec.repl
+machine LoadPlatformDescription @ec/betrusted-ec.repl
 showAnalyzer uart
 sysbus SilenceRange <0xE0005800, 0xE0005FFF>
 macro reset
 """
-    sysbus LoadBinary $ORIGIN/ec/kernel.bin 0x10000000
+    sysbus LoadBinary @ec/kernel.bin 0x10000000
     cpu PC 0x10000000
 """
 runMacro $reset
