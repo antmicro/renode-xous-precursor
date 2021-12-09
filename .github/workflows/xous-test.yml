@@ -13,8 +13,10 @@ jobs:
       - name: Build xous-precursor renode image
         run: ./prepare_image.sh
         shell: bash
-      - name: Copy testing resc file to a proper folder
-        run: cp xous.resc xous-core/emulation/xous-test.resc
+      - name: Copy test files to a proper folder
+        run: | 
+            cp xous.resc xous-core/emulation/xous-test.resc
+            cp onBootScreenshot.png xous-core/emulation/onBootScreenshot.png
       - name: Run tests
         uses: antmicro/renode-test-action@v1.0.0
         with:
