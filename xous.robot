@@ -9,6 +9,8 @@ Resource                      ${RENODEKEYWORDS}
 ${SCRIPT}                     ${CURDIR}/xous-core/emulation/xous-test.resc
 ${CONSOLE}                    sysbus.console
 ${EC_UART}                    sysbus.uart
+${FRAME1}                     @onBootScreenshot.png
+
 
 *** Keywords ***
 
@@ -22,4 +24,17 @@ Should Enter Main Loop On SoC And EC
     Start Emulation
     Wait For Line On Uart     main loop    testerId=1
     Wait For Line On Uart     status: starting main loop    testerId=0
+
+Should Test FrameBuffer
+    Create XousMachine
+    Start Emulation
+    Execute Command           emulation CreateFrameBufferTester "fb_tester" 5
+
+    Execute Command           mach set 0 
+    Execute Command           fb_tester AttachTo memlcd
+
+    Wait For Line On Uart     main loop    testerId=1
+    Wait For Line On Uart     status: starting main loop    testerId=0
+
+    Execute Command           fb_tester WaitForFrame ${FRAME1}
 
