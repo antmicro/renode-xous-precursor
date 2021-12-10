@@ -19,6 +19,4 @@ pushd xous-core
 cargo xtask renode-image
 popd
 
-cp xous.resc xous-core/emulation/xous.resc
-
 

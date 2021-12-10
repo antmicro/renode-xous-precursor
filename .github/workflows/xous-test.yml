@@ -16,7 +16,8 @@ jobs:
       - name: Copy test files to a proper folder
         run: | 
             cp xous.resc xous-core/emulation/xous-test.resc
-            cp onBootScreenshot.png xous-core/emulation/onBootScreenshot.png
+            cp -r screenshots xous-core/emulation/
+            cp xous.resc xous-core/emulation/xous.resc
       - name: Run tests
         uses: antmicro/renode-test-action@v1.0.0
         with:
