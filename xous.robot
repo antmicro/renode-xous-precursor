@@ -9,9 +9,9 @@ Resource                      ${RENODEKEYWORDS}
 ${SCRIPT}                     ${CURDIR}/xous-core/emulation/xous-test.resc
 ${CONSOLE}                    sysbus.console
 ${EC_UART}                    sysbus.uart
-${BOOT_FRAME}                 @screens/onBootScreenshot.png
-${WRITE_FRAME}                @screens/echoScreenshot.png  
-${EXECUTE_FRAME}              @screens/echoResultScreenshot.png  
+${BOOT_FRAME}                 @screenshots/onBootScreenshot.png
+${WRITE_FRAME}                @screenshots/echoScreenshot.png  
+${EXECUTE_FRAME}              @screenshots/echoResultScreenshot.png  
 
 *** Keywords ***
 Create Xous Machine
