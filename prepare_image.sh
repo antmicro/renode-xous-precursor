@@ -1,5 +1,9 @@
 #!/bin/bash  -xeu
 
+# Donwload rust
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+source $HOME/.cargo/env
+
 # Build riscv32imac-unknown-xous-elf toolchain
 cd $(rustc --print sysroot)
 wget https://github.com/betrusted-io/rust/releases/download/1.58.1.1/riscv32imac-unknown-xous_1.58.1.zip
@@ -19,3 +23,7 @@ pushd xous-core
 cargo xtask renode-image
 popd
 
+# Copy files to right folders
+cp xous.resc xous-core/emulation/xous-test.resc
+cp -r screenshots xous-core/emulation/
+cp xous.resc xous-core/emulation/xous.resc

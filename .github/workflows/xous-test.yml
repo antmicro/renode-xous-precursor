@@ -6,18 +6,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Prepare xous dependencies
-        run: |
-            sudo apt install curl -y
-            curl https://sh.rustup.rs -sSf | sh -s -- -y
-            source $HOME/.cargo/env
+        run: sudo apt install curl -y
       - name: Build xous-precursor renode image
         run: ./prepare_image.sh
         shell: bash
-      - name: Copy test files to a proper folder
-        run: | 
-            cp xous.resc xous-core/emulation/xous-test.resc
-            cp -r screenshots xous-core/emulation/
-            cp xous.resc xous-core/emulation/xous.resc
       - name: Run tests
         uses: antmicro/renode-test-action@v1.0.0
         with:
