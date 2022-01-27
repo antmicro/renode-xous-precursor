@@ -2,7 +2,7 @@
 
 # Build riscv32imac-unknown-xous-elf toolchain
 cd $(rustc --print sysroot)
-wget https://github.com/betrusted-io/rust/releases/download/1.57.0.3/riscv32imac-unknown-xous_1.57.0.zip
+wget https://github.com/betrusted-io/rust/releases/download/1.58.1.1/riscv32imac-unknown-xous_1.58.1.zip
 rm -rf lib/rustlib/riscv32imac-unknown-xous-elf # Remove any existing version
 unzip *.zip
 rm *.zip
@@ -18,5 +18,4 @@ popd
 pushd xous-core
 cargo xtask renode-image
 popd
-
 
