@@ -6,7 +6,7 @@ Test Teardown                 Test Teardown
 Resource                      ${RENODEKEYWORDS}
 
 *** Variables ***
-${SCRIPT}                     ${CURDIR}/xous-core/emulation/xous-test.resc
+${SCRIPT}                     ${CURDIR}/xous.resc
 ${CONSOLE}                    sysbus.console
 ${EC_UART}                    sysbus.uart
 ${BOOT_FRAME}                 @screenshots/onBootScreenshot.png

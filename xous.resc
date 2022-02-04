@@ -1,5 +1,5 @@
 using sysbus
-path add $ORIGIN 
+path add $ORIGIN/xous-core/emulation
 i @peripherals/ABRTCMC.cs
 i @peripherals/BetrustedEcI2C.cs
 i @peripherals/BetrustedSocI2C.cs
@@ -20,31 +20,34 @@ i @peripherals/trng_kernel.cs
 i @peripherals/trng_server.cs
 i @peripherals/TUSB320LAI.cs
 i @peripherals/wfi.cs
+
 mach create "SoC"
 machine LoadPlatformDescription @soc/betrusted-soc.repl
-#showAnalyzer uart
-#showAnalyzer console
-#showAnalyzer app_uart
-#showAnalyzer memlcd
+showAnalyzer console
+showAnalyzer memlcd
 sysbus LoadBinary @../precursors/soc_csr.bin 0x20000000
+sysbus.cpu InstallCustomInstructionHandlerFromFile "00ss0fdbbbbbaaaaa000ddddd0001011" @vexriscv-aes.py
+
 macro reset
 """
     sysbus LoadELF @../loader/target/riscv32imac-unknown-xous-elf/release/loader
     sysbus LoadBinary @../target/riscv32imac-unknown-xous-elf/release/xous.img 0x20980000
     cpu SetRegisterUnsafe 10 0x20980000
 """
-mach set 0
 runMacro $reset
-sysbus.cpu InstallCustomInstructionHandlerFromFile "00ss0fdbbbbbaaaaa000ddddd0001011" @vexriscv-aes.py
+
 mach clear
+
 mach create "EC"
 machine LoadPlatformDescription @ec/betrusted-ec.repl
 showAnalyzer uart
 sysbus SilenceRange <0xE0005800, 0xE0005FFF>
+
 macro reset
 """
     sysbus LoadBinary @ec/kernel.bin 0x10000000
     cpu PC 0x10000000
 """
 runMacro $reset
+
 mach clear
