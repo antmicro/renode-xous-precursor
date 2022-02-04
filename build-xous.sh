@@ -15,15 +15,7 @@ cd -
 # Download xous-core
 git clone https://github.com/betrusted-io/xous-core.git
 pushd xous-core
-cargo xtask
-popd
+git checkout 827888c
 
-# Build renode-image for xous-precursor
-pushd xous-core
 cargo xtask renode-image
 popd
-
-# Copy files to right folders
-cp xous.resc xous-core/emulation/xous-test.resc
-cp -r screenshots xous-core/emulation/
-cp xous.resc xous-core/emulation/xous.resc
