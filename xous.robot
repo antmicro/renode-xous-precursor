@@ -9,9 +9,12 @@ Resource                      ${RENODEKEYWORDS}
 ${SCRIPT}                     ${CURDIR}/xous.resc
 ${CONSOLE}                    sysbus.console
 ${EC_UART}                    sysbus.uart
-${BOOT_FRAME}                 @screenshots/onBootScreenshot.png
-${WRITE_FRAME}                @screenshots/echoScreenshot.png  
-${EXECUTE_FRAME}              @screenshots/echoResultScreenshot.png  
+
+${BOOT_FRAME}                 @${CURDIR}/screenshots/pddb-format.png
+${STATUS_BAR}                 @${CURDIR}/screenshots/status-bar.png
+${HELP_RESULT}                @${CURDIR}/screenshots/help.png
+${VER_EC}                     @${CURDIR}/screenshots/ver-ec.png
+${MENU_SCREEN}                @${CURDIR}/screenshots/popup.png
 
 *** Keywords ***
 Create Xous Machine
@@ -19,19 +22,22 @@ Create Xous Machine
     Create Terminal Tester    ${CONSOLE}    machine=SoC
     Create Terminal Tester    ${EC_UART}    machine=EC
 
-Write Example Text On Memlcd
-    #For now, there is no better way to write a string using keyboard model used here.
-    #That's why we decided to send the message letter by letter by writing values into UART_CHAR register.
-    #Text written here is "echo cat".
-    Execute Command           mach set 0
-    Execute Command           keyboard WriteDoubleWord 0 101
-    Execute Command           keyboard WriteDoubleWord 0 99
-    Execute Command           keyboard WriteDoubleWord 0 104
-    Execute Command           keyboard WriteDoubleWord 0 111
-    Execute Command           keyboard WriteDoubleWord 0 32
-    Execute Command           keyboard WriteDoubleWord 0 99
-    Execute Command           keyboard WriteDoubleWord 0 97
-    Execute Command           keyboard WriteDoubleWord 0 116
+Home
+    Execute Command           keyboard InjectKey 0x1b
+    Execute Command           keyboard InjectKey 0x5b
+    Execute Command           keyboard InjectKey 0x31
+    Execute Command           keyboard InjectKey 0x7e
+
+Arrow Up
+    Execute Command           keyboard InjectKey 0x1b
+    Execute Command           keyboard InjectKey 0x5b
+    Execute Command           keyboard InjectKey 0x41
+
+Arrow Down
+    Execute Command           keyboard InjectKey 0x1b
+    Execute Command           keyboard InjectKey 0x5b
+    Execute Command           keyboard InjectKey 0x42
+
 
 *** Test Cases ***
 Should Enter Main Loop On SoC And EC
@@ -43,19 +49,29 @@ Should Enter Main Loop On SoC And EC
 Should Test FrameBuffer
     Create XousMachine
     Start Emulation
-    Execute Command           emulation CreateFrameBufferTester "fb_tester" 20 
+    Execute Command           emulation CreateFrameBufferTester "fb_tester" 20
 
-    Execute Command           mach set 0 
+    Execute Command           mach set 0
     Execute Command           fb_tester AttachTo memlcd
 
     Wait For Line On Uart     main loop    testerId=1
     Wait For Line On Uart     status: starting main loop    testerId=0
 
     Execute Command           fb_tester WaitForFrame ${BOOT_FRAME}
-    Write Example Text On Memlcd
-    Execute Command           fb_tester WaitForFrame ${WRITE_FRAME}
-    #We write carriage return character to execute written command.
-    Execute Command           keyboard WriteDoubleWord 0 13 
-    Execute Command           fb_tester WaitForFrame ${EXECUTE_FRAME}
-    
+# Cancel PDDB formatting
+    Arrow Down
+    Execute Command           keyboard InjectLine ""
+    Arrow Down
+    Execute Command           keyboard InjectLine ""
+
+    Execute Command           fb_tester WaitForFrame ${STATUS_BAR}
+
+    Execute Command           keyboard InjectLine "help"
+    Execute Command           fb_tester WaitForFrame ${HELP_RESULT}
+
+    Execute Command           keyboard InjectLine "ver ec"
+    Execute Command           fb_tester WaitForFrame ${VER_EC}
+
+    Home
+    Execute Command           fb_tester WaitForFrame ${MENU_SCREEN}
 
