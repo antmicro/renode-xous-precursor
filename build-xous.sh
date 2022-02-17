@@ -15,7 +15,7 @@ cd -
 # Download xous-core
 git clone https://github.com/betrusted-io/xous-core.git
 pushd xous-core
-git checkout 827888c
+git checkout 317f313
 
 cargo xtask renode-image
 popd
