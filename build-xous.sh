@@ -16,6 +16,7 @@ cd -
 git clone https://github.com/betrusted-io/xous-core.git
 pushd xous-core
 git checkout 317f313
+git am ../patches/*
 
 cargo xtask renode-image
 popd

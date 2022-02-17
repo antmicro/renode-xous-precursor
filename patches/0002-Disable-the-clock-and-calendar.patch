@@ -1,0 +1,35 @@
+From 00999947fcde83ced658bb9d6f61d41dfbb432f0 Mon Sep 17 00:00:00 2001
+From: Piotr Zierhoffer <pzierhoffer@antmicro.com>
+Date: Thu, 17 Feb 2022 16:40:56 +0100
+Subject: [PATCH 2/2] Disable the clock and calendar
+
+This is required for stable screenshot comparison
+---
+ services/status/src/main.rs | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/services/status/src/main.rs b/services/status/src/main.rs
+index d39cf397..4c8ccac8 100644
+--- a/services/status/src/main.rs
++++ b/services/status/src/main.rs
+@@ -425,7 +425,7 @@ fn xmain() -> ! {
+                 wifi_status = WlanStatus::from_ipc(buffer.to_original::<com::WlanStatusIpc, _>().unwrap());
+             },
+             Some(StatusOpcode::Pump) => {
+-                let elapsed_time = ticktimer.elapsed_ms();
++                let elapsed_time = 0;//ticktimer.elapsed_ms();
+                 { // update the CPU load bar
+                     let mut draw_list = GamObjectList::new(status_gid);
+                     draw_list.push(GamObjectType::Rect(cpuload_rect)).unwrap();
+@@ -555,7 +555,7 @@ fn xmain() -> ! {
+                         write!(
+                             &mut uptime_tv,
+                             "{:02}:{:02} {}/{}",
+-                            dt.hours, dt.minutes, dt.months, dt.days
++                            0, 0, 0, 0
+                         )
+                         .unwrap();
+                     } else {
+-- 
+2.33.0
+
