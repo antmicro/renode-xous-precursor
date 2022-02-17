@@ -1,0 +1,10 @@
+log.html
+report.html
+*robot*.xml
+
+xous-core
+
+snapshots/
+logs/
+
+*.swp
