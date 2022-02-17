@@ -1,5 +1,8 @@
 name: Xous-Precursor tests
-on: [push]
+on:
+  push:
+  schedule:
+    - cron: '0 23 * * *' # run daily at 23:00 (UTC)
 jobs:
   test:
     runs-on: ubuntu-20.04
