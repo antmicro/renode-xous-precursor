@@ -1,53 +1,6 @@
 using sysbus
-path add $ORIGIN/xous-core/emulation
-i @peripherals/ABRTCMC.cs
-i @peripherals/BetrustedEcI2C.cs
-i @peripherals/BetrustedSocI2C.cs
-i @peripherals/BetrustedWatchdog.cs
-i @peripherals/BQ24157.cs
-i @peripherals/BQ27421.cs
-i @peripherals/engine.cs
-i @peripherals/keyboard.cs
-i @peripherals/keyrom.cs
-i @peripherals/LiteX_Timer_32.cs
-i @peripherals/LM3509.cs
-i @peripherals/LSM6DS3.cs
-i @peripherals/memlcd.cs
-i @peripherals/sha512.cs
-i @peripherals/spinor_soft_int.cs
-i @peripherals/ticktimer.cs
-i @peripherals/trng_kernel.cs
-i @peripherals/trng_server.cs
-i @peripherals/TUSB320LAI.cs
-i @peripherals/wfi.cs
+path add $ORIGIN/xous-core
 
-mach create "SoC"
-machine LoadPlatformDescription @soc/betrusted-soc.repl
-showAnalyzer console
-showAnalyzer memlcd
-sysbus LoadBinary @../precursors/soc_csr.bin 0x20000000
-sysbus.cpu InstallCustomInstructionHandlerFromFile "00ss0fdbbbbbaaaaa000ddddd0001011" @vexriscv-aes.py
 
-macro reset
-"""
-    sysbus LoadELF @../loader/target/riscv32imac-unknown-xous-elf/release/loader
-    sysbus LoadBinary @../target/riscv32imac-unknown-xous-elf/release/xous.img 0x20980000
-    cpu SetRegisterUnsafe 10 0x20980000
-"""
-runMacro $reset
-
-mach clear
-
-mach create "EC"
-machine LoadPlatformDescription @ec/betrusted-ec.repl
-showAnalyzer uart
-sysbus SilenceRange <0xE0005800, 0xE0005FFF>
-
-macro reset
-"""
-    sysbus LoadBinary @ec/kernel.bin 0x10000000
-    cpu PC 0x10000000
-"""
-runMacro $reset
-
-mach clear
+# Use the RESC file distributed with xous-core
+i $ORIGIN/xous-core/emulation/xous-release.resc
