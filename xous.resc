@@ -1,6 +1,8 @@
 using sysbus
 path add $ORIGIN/xous-core
 
+# Set random seed to achiveve same background for modal windows
+emulation SetSeed 1234
 
 # Use the RESC file distributed with xous-core
 i $ORIGIN/xous-core/emulation/xous-release.resc
