@@ -36,13 +36,13 @@ renode xous-core/emulation/xous.resc
 
 You should see an emulated lcd screen like this:
 
-![image](https://user-images.githubusercontent.com/95023110/151563022-21547748-d525-4f2f-b243-25d0ef246225.png)
+![image](screenshots/pddb-format.png)
 
 You can use your keyboard to interact with the emulated LCD screen.
 
 Run ``help`` to see the list of all available commands:
 
-![image](https://user-images.githubusercontent.com/95023110/151568003-22b91b46-18da-4fd8-91f2-b7c230661c5c.png)
+![image](screenshots/help.png)
 
 On UART you should see information about starting the main loop:
 
