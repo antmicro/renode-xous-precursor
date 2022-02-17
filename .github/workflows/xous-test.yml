@@ -8,6 +8,10 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      - name: Configure git
+        run: |
+          git config --global user.name "Antmicro"
+          git config --global user.email "contact@antmicro.com"
       - name: Prepare xous dependencies
         run: sudo apt install curl -y
       - name: Build Xous
