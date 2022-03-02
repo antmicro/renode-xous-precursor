@@ -1,7 +1,7 @@
 #!/bin/bash  -xeu
 
 # Donwload rust
-curl https://sh.rustup.rs -sSf | sh -s -- -y
+curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain=1.58.1
 source $HOME/.cargo/env
 
 # Build riscv32imac-unknown-xous-elf toolchain
