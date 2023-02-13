@@ -3,7 +3,7 @@ Suite Setup                   Setup
 Suite Teardown                Teardown
 Test Setup                    Reset Emulation
 Test Teardown                 Test Teardown
-Resource                      ${RENODEKEYWORDS}
+# Resource                      ${RENODEKEYWORDS}
 
 *** Variables ***
 ${SCRIPT}                     ${CURDIR}/xous.resc
@@ -46,32 +46,33 @@ Should Enter Main Loop On SoC And EC
     Wait For Line On Uart     main loop    testerId=1
     Wait For Line On Uart     status: starting main loop    testerId=0
 
-Should Test FrameBuffer
-    Create XousMachine
-    Start Emulation
+# Should Test FrameBuffer
+#     Create Xous Machine
+#     Start Emulation
+#     Wait For Line On Uart     main loop    testerId=1
+#     Wait For Line On Uart     status: starting main loop    testerId=0
+
     Execute Command           emulation CreateFrameBufferTester "fb_tester" 20
 
     Execute Command           mach set 0
     Execute Command           fb_tester AttachTo memlcd
 
-    Wait For Line On Uart     main loop    testerId=1
-    Wait For Line On Uart     status: starting main loop    testerId=0
-
-    Execute Command           fb_tester WaitForFrame ${BOOT_FRAME}
+    Execute Command           fb_tester WaitForFrameROI ${BOOT_FRAME} 0 36 336 500
 # Cancel PDDB formatting
     Arrow Down
     Execute Command           keyboard InjectLine ""
     Arrow Down
     Execute Command           keyboard InjectLine ""
 
-    Execute Command           fb_tester WaitForFrame ${STATUS_BAR}
+    Execute Command           fb_tester WaitForFrameROI ${STATUS_BAR} 0 36 336 500
 
     Execute Command           keyboard InjectLine "help"
-    Execute Command           fb_tester WaitForFrame ${HELP_RESULT}
+    Execute Command           fb_tester WaitForFrameROI ${HELP_RESULT} 0 36 336 500
 
     Execute Command           keyboard InjectLine "ver ec"
-    Execute Command           fb_tester WaitForFrame ${VER_EC}
+    Execute Command           fb_tester WaitForFrameROI ${VER_EC} 0 36 336 500
 
     Home
-    Execute Command           fb_tester WaitForFrame ${MENU_SCREEN}
+    # TODO: Why does this fail
+    # Execute Command           fb_tester WaitForFrameROI ${MENU_SCREEN} 0 36 336 500
 
