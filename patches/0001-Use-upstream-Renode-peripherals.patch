@@ -1,0 +1,95 @@
+From 9bb25d21263fb371186b7aae8c772b4ff593027e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Nikodem=20Rabuli=C5=84ski?= <nrabulinski@antmicro.com>
+Date: Wed, 15 Feb 2023 12:42:42 +0100
+Subject: [PATCH] [PATCH] Use upstream Renode peripherals
+
+---
+ emulation/betrusted.resc         | 4 ----
+ emulation/ec/betrusted-ec.repl   | 2 +-
+ emulation/soc/betrusted-soc.repl | 6 +++---
+ svd2repl/src/generate.rs         | 4 ++--
+ 4 files changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/emulation/betrusted.resc b/emulation/betrusted.resc
+index 4d8d7afc..06680080 100644
+--- a/emulation/betrusted.resc
++++ b/emulation/betrusted.resc
+@@ -9,9 +9,6 @@ using sysbus
+ 
+ # Add peripherals that are defined in C#.  You must restart Renode
+ # if you modify these files.
+-i @peripherals/ABRTCMC.cs
+-i @peripherals/BetrustedEcI2C.cs
+-i @peripherals/BetrustedSocI2C.cs
+ i @peripherals/BetrustedSpinor.cs
+ i @peripherals/BetrustedWatchdog.cs
+ i @peripherals/BQ24157.cs
+@@ -32,7 +29,6 @@ i @peripherals/LiteX_Timer_32.cs
+ i @peripherals/LM3509.cs
+ i @peripherals/LSM6DS3.cs
+ i @peripherals/memlcd.cs
+-i @peripherals/MXIC_MX66UM1G45G.cs
+ i @peripherals/sha512.cs
+ i @peripherals/spinor_soft_int.cs
+ i @peripherals/ticktimer.cs
+diff --git a/emulation/ec/betrusted-ec.repl b/emulation/ec/betrusted-ec.repl
+index e1918ef0..69130a50 100644
+--- a/emulation/ec/betrusted-ec.repl
++++ b/emulation/ec/betrusted-ec.repl
+@@ -13,7 +13,7 @@ timer0: Timers.Betrusted.LiteX_Timer_32 @ {
+     frequency: 100000000
+     -> cpu@1000
+ 
+-i2c: I2C.Betrusted.BetrustedEcI2C @ sysbus 0xE0004800
++i2c: I2C.BetrustedEcI2C @ sysbus 0xE0004800
+     -> cpu @ 1002
+ 
+ ticktimer: Timers.Betrusted.TickTimer @ sysbus 0xe0005000
+diff --git a/emulation/soc/betrusted-soc.repl b/emulation/soc/betrusted-soc.repl
+index c6569e33..9bea6e16 100644
+--- a/emulation/soc/betrusted-soc.repl
++++ b/emulation/soc/betrusted-soc.repl
+@@ -36,7 +36,7 @@ com: SPI.Betrusted.BetrustedSocCom @ sysbus 0xf000d000
+     EC_INTERRUPT -> btevents @ 0
+     IRQ -> cpu @ 1005
+ 
+-i2c: I2C.Betrusted.BetrustedSocI2C @ sysbus 0xf000e000
++i2c: I2C.BetrustedSocI2C @ sysbus 0xf000e000
+     IRQ -> cpu @ 1006
+ 
+ btevents: GPIOPort.Betrusted.BtEvents @ sysbus 0xf000f000
+@@ -123,11 +123,11 @@ usbdev: Memory.MappedMemory @ sysbus 0xe0040000
+ 
+ 
+ 
+-abracom_rtc: Timers.Betrusted.ABRTCMC @ i2c 0x68
++abracom_rtc: Timers.ABRTCMC @ i2c 0x68
+ 
+ audio_codec: Sensors.Betrusted.TLV320AIC3100 @ i2c 0x18
+ 
+-flash: SPI.Betrusted.MXIC_MX66UM1G45G @ spinor
++flash: SPI.MXIC_MX66UM1G45G @ spinor
+     underlyingMemory: spiflash
+ 
+ sysbus:
+diff --git a/svd2repl/src/generate.rs b/svd2repl/src/generate.rs
+index 941af64f..8d947c45 100644
+--- a/svd2repl/src/generate.rs
++++ b/svd2repl/src/generate.rs
+@@ -499,11 +499,11 @@ cpu: CPU.Betrusted.AesVexRiscv @ sysbus
+ 
+ fn print_footer<U: Write>(out: &mut U) -> std::io::Result<()> {
+     let s = r####"
+-abracom_rtc: Timers.Betrusted.ABRTCMC @ i2c 0x68
++abracom_rtc: Timers.ABRTCMC @ i2c 0x68
+ 
+ audio_codec: Sensors.Betrusted.TLV320AIC3100 @ i2c 0x18
+ 
+-flash: SPI.Betrusted.MXIC_MX66UM1G45G @ spinor
++flash: SPI.MXIC_MX66UM1G45G @ spinor
+     underlyingMemory: spiflash
+ 
+ sysbus:
+-- 
+2.39.1
+
