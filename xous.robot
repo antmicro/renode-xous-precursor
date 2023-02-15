@@ -46,14 +46,11 @@ Should Enter Main Loop On SoC And EC
     Wait For Line On Uart     main loop    testerId=1
     Wait For Line On Uart     status: starting main loop    testerId=0
 
-# Should Test FrameBuffer
-#     # Evaluate    pdb.Pdb(stdout=sys.__stdout__).set_trace()    modules=sys, pdb
-#     Create Xous Machine
-#     # Evaluate    pdb.Pdb(stdout=sys.__stdout__).set_trace()    modules=sys, pdb
-#     Start Emulation
-#     # Evaluate    pdb.Pdb(stdout=sys.__stdout__).set_trace()    modules=sys, pdb
-#     Wait For Line On Uart     main loop    testerId=1
-#     Wait For Line On Uart     status: starting main loop    testerId=0
+Should Test FrameBuffer
+    Create Xous Machine
+    Start Emulation
+    Wait For Line On Uart     main loop    testerId=1
+    Wait For Line On Uart     status: starting main loop    testerId=0
 
     Execute Command           emulation CreateFrameBufferTester "fb_tester" 20
 
