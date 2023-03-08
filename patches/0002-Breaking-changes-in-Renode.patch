@@ -1,0 +1,107 @@
+From eccfc11211e912b67702801254f8d06dd9822e45 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Nikodem=20Rabuli=C5=84ski?= <nrabulinski@antmicro.com>
+Date: Wed, 8 Mar 2023 12:27:04 +0100
+Subject: [PATCH] [FIX] Breaking changes in Renode
+
+---
+ emulation/peripherals/BetrustedSpinor.cs   | 2 +-
+ emulation/peripherals/BetrustedWatchdog.cs | 2 +-
+ emulation/peripherals/LiteX_Timer_32.cs    | 4 ++--
+ emulation/peripherals/WF200.cs             | 6 +++---
+ emulation/peripherals/keyrom.cs            | 2 +-
+ 5 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/emulation/peripherals/BetrustedSpinor.cs b/emulation/peripherals/BetrustedSpinor.cs
+index ec4a81f2..1b48c191 100644
+--- a/emulation/peripherals/BetrustedSpinor.cs
++++ b/emulation/peripherals/BetrustedSpinor.cs
+@@ -115,7 +115,7 @@ namespace Antmicro.Renode.Peripherals.SPI.Betrusted
+                     .WithFlag(0, name: "wip")
+                 },
+                 {(long)Registers.WData, new DoubleWordRegister(this)
+-                    .WithValueField(0, 16, FieldMode.Write, writeCallback: (_, data) => HandleTxFifoWrite(data), name: "wdata")
++                    .WithValueField(0, 16, FieldMode.Write, writeCallback: (_, data) => HandleTxFifoWrite((uint)data), name: "wdata")
+                 },
+                 {(long)Registers.EvStatus, new DoubleWordRegister(this)
+                     .WithFlag(0, name: "ecc_error")
+diff --git a/emulation/peripherals/BetrustedWatchdog.cs b/emulation/peripherals/BetrustedWatchdog.cs
+index 1f852288..28be6e6c 100644
+--- a/emulation/peripherals/BetrustedWatchdog.cs
++++ b/emulation/peripherals/BetrustedWatchdog.cs
+@@ -35,7 +35,7 @@ namespace Antmicro.Renode.Peripherals.Timers.Betrusted
+                 },
+                 {(long)Registers.Period, new DoubleWordRegister(this)
+                     .WithValueField(0, 32, FieldMode.Read | FieldMode.Write, (_, period) => {
+-                        this.reset_target = XilinxClockToMs(period);
++                        this.reset_target = XilinxClockToMs((uint)period);
+                     })
+                 },
+                 {(long)Registers.State, new DoubleWordRegister(this)
+diff --git a/emulation/peripherals/LiteX_Timer_32.cs b/emulation/peripherals/LiteX_Timer_32.cs
+index d458cb2d..330984eb 100644
+--- a/emulation/peripherals/LiteX_Timer_32.cs
++++ b/emulation/peripherals/LiteX_Timer_32.cs
+@@ -61,14 +61,14 @@ namespace Antmicro.Renode.Peripherals.Timers.Betrusted
+             Registers.Load.Define32(this)
+                 .WithValueField(0, 32, name: "LOAD", writeCallback: (_, val) =>
+                 {
+-                    loadValue = val;
++                    loadValue = (uint)val;
+                 });
+             ;
+ 
+             Registers.Reload.Define32(this)
+                 .WithValueField(0, 32, name: "RELOAD", writeCallback: (_, val) =>
+                 {
+-                    reloadValue = val;
++                    reloadValue = (uint)val;
+                 });
+             ;
+ 
+diff --git a/emulation/peripherals/WF200.cs b/emulation/peripherals/WF200.cs
+index 92cd5534..d01547b1 100644
+--- a/emulation/peripherals/WF200.cs
++++ b/emulation/peripherals/WF200.cs
+@@ -549,7 +549,7 @@ namespace Antmicro.Renode.Peripherals.Network.Betrusted
+                     {
+                         var existing = RegistersCollection.Read((long)spiAddress);
+                         // Control register is always Mode 0
+-                        var val = GetWriteRegister(existing, spiAddress == Registers.Config ? 0 : ByteOrder.Value);
++                        var val = GetWriteRegister(existing, spiAddress == Registers.Config ? 0 : (uint)ByteOrder.Value);
+                         var logLevel = LogLevel.Debug;
+                         if (spiAddress == Registers.MemoryAddress)
+                         {
+@@ -562,7 +562,7 @@ namespace Antmicro.Renode.Peripherals.Network.Betrusted
+                     }
+                 case Registers.GeneralPurpose:
+                     {
+-                        var val = GetWriteRegister(0, ByteOrder.Value);
++                        var val = GetWriteRegister(0, (uint)ByteOrder.Value);
+                         var gpReg = (val >> 24) & 0xff;
+                         this.Log(LogLevel.Debug, "Updating value of GP reg {0} to 0x{1:X8}", gpReg, val);
+                         break;
+@@ -575,7 +575,7 @@ namespace Antmicro.Renode.Peripherals.Network.Betrusted
+                     }
+                     else
+                     {
+-                        var val = GetWriteRegister(0, ByteOrder.Value);
++                        var val = GetWriteRegister(0, (uint)ByteOrder.Value);
+                         switch (MemoryAddress.Value)
+                         {
+                             // ADDR_DWL_CTRL_AREA_GET
+diff --git a/emulation/peripherals/keyrom.cs b/emulation/peripherals/keyrom.cs
+index 30bd41e4..87eef74a 100644
+--- a/emulation/peripherals/keyrom.cs
++++ b/emulation/peripherals/keyrom.cs
+@@ -27,7 +27,7 @@ namespace Antmicro.Renode.Peripherals.Miscellaneous.Betrusted
+         private void DefineRegisters()
+         {
+             Registers.ADDRESS.Define(this)
+-                .WithValueField(0, 8, writeCallback: (_, value) => { this.address = value; }, valueProviderCallback: _ => { return this.address; })
++                .WithValueField(0, 8, writeCallback: (_, value) => { this.address = (uint)value; }, valueProviderCallback: _ => { return this.address; })
+             ;
+ 
+             Registers.DATA.Define(this)
+-- 
+2.39.1
+
