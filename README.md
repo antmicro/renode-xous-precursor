@@ -1,6 +1,6 @@
 # Renode simulation for Xous on Precursor
 
-Copyright (c) 2022 [Antmicro](https://www.antmicro.com/)
+Copyright (c) 2023 [Antmicro](https://www.antmicro.com/)
 
 This repository contains a script and test suite to simulate the [Precursor](https://betrusted.io/) platform running [Xous](https://github.com/betrusted-io/xous-core) in [Renode](https://renode.io).
 
